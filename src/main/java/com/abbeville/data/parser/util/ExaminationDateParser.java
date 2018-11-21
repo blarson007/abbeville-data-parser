@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -21,7 +20,6 @@ public class ExaminationDateParser {
 	private final SimpleDateFormat sdf2 = new SimpleDateFormat("dd MMM, yyyy");
 	private final SimpleDateFormat sdf3 = new SimpleDateFormat("M/d/yyyy");
 	
-	private Calendar calendar;
 	private LocalDate localDate;
 	
 	public ExaminationDateParser(Cell dateCell) throws ParseException {
@@ -29,7 +27,6 @@ public class ExaminationDateParser {
 		
 		try {
 			examDate = dateCell.getDateCellValue();
-//			setCalendar(examDate);
 			setLocalDate(examDate);
 			return;
 		} catch (Exception e) {  }
@@ -49,7 +46,6 @@ public class ExaminationDateParser {
 				}
 			}
 		}
-//		setCalendar(examDate);
 		setLocalDate(examDate);
 	}
 	
@@ -57,20 +53,11 @@ public class ExaminationDateParser {
 		localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 	
-	
-	@SuppressWarnings("unused")
-	private void setCalendar(Date date) {
-		calendar = Calendar.getInstance();
-		calendar.setTime(date);
-	}
-	
 	public int getExamYear() {
-//		return calendar.get(Calendar.YEAR);
 		return localDate.getYear();
 	}
 	
 	public int getExamMonth() {
-//		return calendar.get(Calendar.MONTH);
 		return localDate.getMonthValue();
 	}
 	
