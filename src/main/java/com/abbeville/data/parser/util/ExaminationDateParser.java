@@ -2,6 +2,9 @@ package com.abbeville.data.parser.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,13 +22,15 @@ public class ExaminationDateParser {
 	private final SimpleDateFormat sdf3 = new SimpleDateFormat("M/d/yyyy");
 	
 	private Calendar calendar;
+	private LocalDate localDate;
 	
 	public ExaminationDateParser(Cell dateCell) throws ParseException {
 		Date examDate = null;
 		
 		try {
 			examDate = dateCell.getDateCellValue();
-			setCalendar(examDate);
+//			setCalendar(examDate);
+			setLocalDate(examDate);
 			return;
 		} catch (Exception e) {  }
 		
@@ -44,23 +49,32 @@ public class ExaminationDateParser {
 				}
 			}
 		}
-		setCalendar(examDate);
+//		setCalendar(examDate);
+		setLocalDate(examDate);
 	}
 	
+	private void setLocalDate(Date date) {
+		localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+	
+	
+	@SuppressWarnings("unused")
 	private void setCalendar(Date date) {
 		calendar = Calendar.getInstance();
 		calendar.setTime(date);
 	}
 	
 	public int getExamYear() {
-		return calendar.get(Calendar.YEAR);
+//		return calendar.get(Calendar.YEAR);
+		return localDate.getYear();
 	}
 	
 	public int getExamMonth() {
-		return calendar.get(Calendar.DAY_OF_MONTH);
+//		return calendar.get(Calendar.MONTH);
+		return localDate.getMonthValue();
 	}
 	
 	public String getDateString() {
-		return calendar.toInstant().toString();
+		return localDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
 	}
 }

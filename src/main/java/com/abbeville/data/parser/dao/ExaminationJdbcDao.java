@@ -40,13 +40,13 @@ public class ExaminationJdbcDao {
 				incomingExaminationCount, examinationYear, examinationMonth);
 	}
 	
-	public void incrementExaminationCountForMonth(int examinationYear, int examinationMonth) {
+	public boolean incrementExaminationCountForMonth(int examinationYear, int examinationMonth) {
 		logger.debug("Performing examination update for year: " + examinationYear + ", month: " + examinationMonth);
 		
-		jdbcTemplate.update(
+		return jdbcTemplate.update(
 				"UPDATE examinations_by_month " +
 				"SET incoming_examinations = incoming_examinations + 1 " +
-				"WHERE examination_year = ? AND examination_month = ?", examinationYear, examinationMonth);
+				"WHERE examination_year = ? AND examination_month = ?", examinationYear, examinationMonth) > 0;
 	}
 	
 	public Collection<Examination> getAllExaminationData() {

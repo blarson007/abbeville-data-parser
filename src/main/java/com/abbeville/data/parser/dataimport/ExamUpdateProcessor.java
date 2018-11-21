@@ -5,11 +5,15 @@ import java.text.ParseException;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.abbeville.data.parser.dao.ExaminationJdbcDao;
 import com.abbeville.data.parser.util.ExaminationDateParser;
 
 public class ExamUpdateProcessor {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ExamUpdateProcessor.class);
 	
 	private final DataFormatter dataFormatter = new DataFormatter();
 
@@ -25,18 +29,19 @@ public class ExamUpdateProcessor {
 			
 			String originalHospitalString = dataFormatter.formatCellValue(row.getCell(0));
 			String examinationString = dataFormatter.formatCellValue(row.getCell(1));
-//			String dateString = dataFormatter.formatCellValue(row.getCell(2));
-//			Date date = row.getCell(2).getDateCellValue();
 			ExaminationDateParser dateParser = new ExaminationDateParser(row.getCell(2));
-			
-			System.out.println("Processing value: " + dateParser.getDateString());
 			
 			if (originalHospitalString.equals("Abbeville") && (examinationString.contains("Heart") || examinationString.contains("Cardio") ||
 					examinationString.equals("Cardiac"))) {
 				
+				logger.warn("Updating month: " + dateParser.getExamMonth() + ", year: " + dateParser.getExamYear() + " for date: " + dateParser.getDateString());
+				logger.warn("Original hospital: " + originalHospitalString + "; Examination: " + examinationString);
 				
+				boolean updated = ExaminationJdbcDao.getInstance().incrementExaminationCountForMonth(dateParser.getExamYear(), dateParser.getExamMonth());
 				
-				ExaminationJdbcDao.getInstance().incrementExaminationCountForMonth(dateParser.getExamYear(), dateParser.getExamMonth());
+				if (!updated) {
+					logger.error("Failed to update existing record!");
+				}
 			}
 		}
 	}

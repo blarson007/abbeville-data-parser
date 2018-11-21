@@ -22,9 +22,6 @@ public class ExamWriter {
 
 	public void writeDataToExcel() throws IOException {
 		Workbook workbook = new XSSFWorkbook();
-		
-//		CreationHelper createHelper = workbook.getCreationHelper();
-		
 		Sheet sheet = workbook.createSheet("Abbeville Final");
 		
 		Row headerRow = sheet.createRow(0);

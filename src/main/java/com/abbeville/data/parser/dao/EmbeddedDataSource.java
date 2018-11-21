@@ -1,6 +1,9 @@
 package com.abbeville.data.parser.dao;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.List;
 
@@ -30,6 +33,13 @@ public class EmbeddedDataSource {
 		boolean running = false;
 		
 		Server server = new Server();
+		
+		try {
+			server.setLogWriter(new PrintWriter(new FileWriter("db.log")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		server.setDatabasePath(0, "file:" + HomeDirectoryConfig.HOME_DIRECTORY + File.separator + "db");
 		server.setPort(9001);
 		server.setDatabaseName(0, "abbeville");
