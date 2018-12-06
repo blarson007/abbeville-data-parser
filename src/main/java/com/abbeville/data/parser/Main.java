@@ -42,7 +42,9 @@ public class Main {
 		} catch (Exception e) {
 			logger.error("Fatal error while starting up the application.", e);
 			System.exit(1);
-		}	
+		}
+		
+		System.exit(0);
 	}
 
 	private static Options createOptions() {

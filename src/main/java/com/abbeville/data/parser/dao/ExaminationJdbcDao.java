@@ -27,7 +27,8 @@ public class ExaminationJdbcDao {
 	private JdbcTemplate jdbcTemplate;
 	
 	private ExaminationJdbcDao() {
-		jdbcTemplate = new JdbcTemplate(new EmbeddedDataSource(true).getDataSource());
+		// Initialize the data source. A value of false indicates we do not want to enable the database browser GUI
+		jdbcTemplate = new JdbcTemplate(new EmbeddedDataSource(false).getDataSource());
 	}
 	
 	public void truncateExistingTables() {
