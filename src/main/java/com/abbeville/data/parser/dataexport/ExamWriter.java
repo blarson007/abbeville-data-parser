@@ -27,7 +27,7 @@ public class ExamWriter {
 		Row headerRow = sheet.createRow(0);
 		
 		Cell cell = headerRow.createCell(0);
-        cell.setCellValue("Incoming Examinations");
+        cell.setCellValue("IncomingExaminations");
         
         Cell cell1 = headerRow.createCell(1);
         cell1.setCellValue("Year");
